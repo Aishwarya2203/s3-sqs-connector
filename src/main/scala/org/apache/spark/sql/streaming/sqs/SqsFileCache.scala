@@ -95,7 +95,7 @@ class SqsFileCache(maxAgeMs: Long, fileNameOnly: Boolean) extends Logging {
       val uncommittedFiles = ListBuffer[(String, Long, String)]()
       while (uncommittedFiles.length < maxFilesPerTrigger && iterator.hasNext) {
         val file = iterator.next()
-        if (file._2.isCommitted && file._2.timestamp >= lastPurgeTimestamp) {
+        if (!file._2.isCommitted && file._2.timestamp >= lastPurgeTimestamp) {
           uncommittedFiles += ((file._1, file._2.timestamp, file._2.messageReceiptHandle))
         }
       }
